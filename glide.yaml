@@ -65,3 +65,5 @@ import:
   version: 56fd3e93ab8a6a61473b33fc687a54c6a7f28421
   subpackages:
   - collectors/testutils
+- package: github.com/LINBIT/golinstor
+  version: v0.8.0
