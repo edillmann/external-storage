@@ -1,0 +1,32 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: linstor-provisioner
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: linstor-provisioner
+    spec:
+      serviceAccount: linstor-provisioner
+      containers:
+        - name: linstor-provisioner
+          image: quay.io/external_storage/linstor-provisioner-arm:latest
+          volumeMounts:
+            - name: linstor-root
+              mountPath: /persistentvolumes
+          env:
+            - name: PROVISIONER_NAME
+              value: fuseim.pri/ifs
+            - name: NFS_SERVER
+              value: 192.168.1.20
+            - name: NFS_PATH
+              value: /mnt/kube_nfs
+      volumes:
+        - name: linstor-root
+          nfs:
+            server: 192.168.1.20
+            path: /mnt/kube_nfs
